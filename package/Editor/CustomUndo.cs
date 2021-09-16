@@ -1,6 +1,6 @@
 ﻿namespace Needle
 {
-	public static class UndoEverything
+	public static class CustomUndo
 	{
 		private static CommandQueue Commands { get; } = new CommandQueue();
 

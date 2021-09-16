@@ -16,7 +16,7 @@ namespace Needle
 		{
 			if (obj.EndsWith(UnityCommandMock.CommandMarker))
 			{
-				UndoEverything.OnRedo(obj);
+				CustomUndo.OnRedo(obj);
 			}
 			else Debug.Log("Unity redo: " + obj);
 		}
@@ -25,7 +25,7 @@ namespace Needle
 		{
 			if (obj.EndsWith(UnityCommandMock.CommandMarker))
 			{
-				UndoEverything.OnUndo(obj);
+				CustomUndo.OnUndo(obj);
 			}
 			else Debug.Log("Unity undo: " + obj);
 		}

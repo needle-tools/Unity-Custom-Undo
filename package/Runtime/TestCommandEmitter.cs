@@ -1,8 +1,8 @@
-using Codice.Client.ChangeTrackerService;
+#if UNITY_EDITOR
 using Needle;
 using Needle.InspectorButton;
 using UnityEditorInternal;
-using UnityEngine;
+using UnityEngine; 
 
 public class TestCommandEmitter : MonoBehaviour
 {
@@ -10,7 +10,7 @@ public class TestCommandEmitter : MonoBehaviour
 		i =>
 		{
 			var cmd = new TestCommand();
-			UndoEverything.Register(cmd);
+			CustomUndo.Register(cmd);
 		}){height = 40};
 
 
@@ -24,7 +24,7 @@ public class TestCommandEmitter : MonoBehaviour
 			if (!i.Prefab) return;
 			var cmd = new CreateObjectCommand(i.Prefab);
 			i._lastCreateObject = cmd;
-			UndoEverything.Register(cmd);
+			CustomUndo.Register(cmd);
 			InternalEditorUtility.RepaintAllViews();
 		}){height = 40};
 
@@ -33,7 +33,7 @@ public class TestCommandEmitter : MonoBehaviour
 		{
 			if (!i.Prefab) return;
 			var cmd = new RotateObjectCommand(i._lastCreateObject);
-			UndoEverything.Register(cmd);
+			CustomUndo.Register(cmd);
 			InternalEditorUtility.RepaintAllViews();
 		}){height = 40};
 
@@ -43,10 +43,11 @@ public class TestCommandEmitter : MonoBehaviour
 			if (!i.Prefab) return;
 			var create = new CreateObjectCommand(i.Prefab);
 			var rotate = new RotateObjectCommand(create);
-			UndoEverything.Register(new CompoundCommand(create, rotate));
+			CustomUndo.Register(new CompoundCommand(create, rotate));
 			InternalEditorUtility.RepaintAllViews();
 		}){height = 40};
 		
 		
 		
 }
+#endif

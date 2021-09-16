@@ -1,13 +1,13 @@
 {
   "dependencies": {
-    "com.needle.inspector-button": {
-      "version": "file:C:/git/UndoEverything/modules/InspectorButton/package",
+    "com.needle.custom-undo-integration": {
+      "version": "file:../../../package",
       "depth": 0,
       "source": "local",
       "dependencies": {}
     },
-    "com.needle.undo-everything": {
-      "version": "file:../../../package",
+    "com.needle.inspector-button": {
+      "version": "file:C:/git/UndoEverything/modules/InspectorButton/package",
       "depth": 0,
       "source": "local",
       "dependencies": {}

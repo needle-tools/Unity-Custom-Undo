@@ -1,5 +1,5 @@
 {
-    "name": "com.needle.undo-everything",
+    "name": "Needle.Custom-Undo-Integration",
     "rootNamespace": "",
     "references": [
         "GUID:fafe27ca89ed5b4409902f7e5c7069c4",
@@ -8,7 +8,7 @@
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
-    "overrideReferences": false,
+    "overrideReferences": true,
     "precompiledReferences": [],
     "autoReferenced": false,
     "defineConstraints": [],

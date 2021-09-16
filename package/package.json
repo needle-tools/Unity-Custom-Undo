@@ -1,5 +1,5 @@
 {
-    "name": "com.needle.undo-everything",
-    "displayName": "UndoEverything",
+    "name": "com.needle.custom-undo-integration",
+    "displayName": "Needle Custom Undo",
     "version": "0.0.1-pre"
 }

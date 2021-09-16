@@ -1,5 +1,5 @@
 {
-    "name": "com.needle.undo-everything.Editor",
+    "name": "Needle.Custom-Undo-Integration.Editor",
     "rootNamespace": "Needle",
     "references": [],
     "includePlatforms": [
