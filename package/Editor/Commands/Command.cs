@@ -3,6 +3,11 @@
 	public abstract class Command : ICommand
 	{
 		public virtual string Name => GetType().Name;
+
+		public Command(bool isDone = false)
+		{
+			this._done = isDone;
+		}
 		
 		void ICommand.PerformRedo()
 		{
