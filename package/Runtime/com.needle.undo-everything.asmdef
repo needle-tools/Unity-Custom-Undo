@@ -1,0 +1,17 @@
+{
+    "name": "com.needle.undo-everything",
+    "rootNamespace": "",
+    "references": [
+        "GUID:fafe27ca89ed5b4409902f7e5c7069c4",
+        "GUID:3c80aac05b946de4b965499ba86817d9"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

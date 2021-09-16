@@ -1,0 +1,6 @@
+﻿projects/*/Library
+projects/*/[tT]emp
+projects/*/[lL]ogs
+projects/*/obj
+projects/*/*.csproj
+projects/*/*.sln
