@@ -4,7 +4,11 @@
 	{
 		public virtual string Name => GetType().Name;
 
-		public Command(bool isDone = false)
+		public bool CanUndo { get; protected set; } = true;
+		public bool CanRedo { get; protected set; } = true;
+		public bool IsDone { get; protected set; } = false;
+
+		protected Command(bool isDone = false)
 		{
 			this._done = isDone;
 		}
