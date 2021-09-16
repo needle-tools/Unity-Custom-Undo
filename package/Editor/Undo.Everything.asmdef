@@ -1,6 +1,6 @@
 {
     "name": "com.needle.undo-everything.Editor",
-    "rootNamespace": "Needle.UndoEverything",
+    "rootNamespace": "Needle",
     "references": [],
     "includePlatforms": [
         "Editor"

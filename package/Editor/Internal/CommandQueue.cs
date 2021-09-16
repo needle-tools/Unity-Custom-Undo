@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using NUnit.Framework;
 
-namespace Needle.UndoEverything
+namespace Needle
 {
 	internal class CommandQueue
 	{
@@ -67,48 +66,5 @@ namespace Needle.UndoEverything
 		private uint _maxLength;
 		private int _currentIndex;
 		private readonly List<ICommand> _commands = new List<ICommand>();
-	}
-
-	public interface ICommand
-	{
-		string Name { get; }
-		internal void PerformUndo();
-		internal void PerformRedo();
-	}
-
-	public abstract class Command : ICommand
-	{
-		public virtual string Name => GetType().Name;
-		
-		void ICommand.PerformRedo()
-		{
-			if (_done) return;
-			try
-			{
-				OnRedo();
-			}
-			finally
-			{
-				_done = true;
-			}
-		}
-
-		void ICommand.PerformUndo()
-		{
-			if (!_done) return;
-			try
-			{
-				OnUndo();
-			}
-			finally
-			{
-				_done = false;
-			}
-		}
-
-		protected abstract void OnRedo();
-		protected abstract void OnUndo();
-		
-		private bool _done = false;
 	}
 }

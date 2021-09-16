@@ -4,9 +4,9 @@ using System.Linq;
 using System.Reflection;
 using UnityEditor;
 
-namespace Needle.UndoEverything
+namespace Needle
 {
-	internal static class UnityUndoHelper
+	internal static class UnityUndoTracker
 	{
 		private static readonly List<string> undoRecords = new List<string>();
 		private static readonly List<string> redoRecords = new List<string>();
@@ -17,8 +17,8 @@ namespace Needle.UndoEverything
 		[InitializeOnLoadMethod]
 		private static void Init()
 		{
-			UnityEditor.Undo.undoRedoPerformed -= OnUndoRedo;
-			UnityEditor.Undo.undoRedoPerformed += OnUndoRedo;
+			Undo.undoRedoPerformed -= OnUndoRedo;
+			Undo.undoRedoPerformed += OnUndoRedo;
 			UpdateLists();
 			UpdateCounts();
 		}

@@ -1,15 +1,15 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Needle.UndoEverything
+namespace Needle
 {
 	[InitializeOnLoad]
-	internal static class UndoListener
+	internal static class UndoRedoEventListener
 	{
-		static UndoListener()
+		static UndoRedoEventListener()
 		{
-			UnityUndoHelper.UnityUndoPerformed += OnUndo;
-			UnityUndoHelper.UnityRedoPerformed += OnRedo;
+			UnityUndoTracker.UnityUndoPerformed += OnUndo;
+			UnityUndoTracker.UnityRedoPerformed += OnRedo;
 		}
 
 		private static void OnRedo(string obj)

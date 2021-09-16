@@ -1,9 +1,7 @@
 ﻿using System;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
 
-namespace Needle.UndoEverything
+namespace Needle
 {
 	public class TestCommand : Command
 	{

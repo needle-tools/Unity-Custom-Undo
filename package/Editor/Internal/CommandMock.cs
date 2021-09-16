@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace Needle.UndoEverything
+namespace Needle
 {
 	internal class UnityCommandMock : ScriptableObject
 	{
@@ -19,7 +19,7 @@ namespace Needle.UndoEverything
 
 			Undo.RegisterCompleteObjectUndo(_instance, name + CommandMarker);
 			_instance.value += 1;
-			UnityUndoHelper.OnDidPerformMockCommand();
+			UnityUndoTracker.OnDidPerformMockCommand();
 		}
 		
 		public uint value;

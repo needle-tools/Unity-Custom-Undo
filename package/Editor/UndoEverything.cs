@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Needle.UndoEverything
+﻿namespace Needle
 {
 	public static class UndoEverything
 	{
