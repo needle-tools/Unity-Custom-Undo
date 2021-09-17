@@ -50,8 +50,6 @@ namespace Needle
 		private bool OnAddCommand(ICommand command)
 		{
 			if (command == null) return false;
-			if (_commands.Contains(command)) return false;
-
 			RemoveCommandAfterIndexIfNecessary();
 			
 			while (_commands.Count >= _maxLength)
