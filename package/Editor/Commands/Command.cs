@@ -8,6 +8,9 @@
 		public bool CanRedo { get; protected set; } = true;
 		public bool IsDone { get; protected set; } = false;
 
+		bool ICommand.CanUndo() => CanUndo;
+		bool ICommand.CanRedo() => CanRedo;
+		
 		protected Command(bool isDone = false)
 		{
 			this._done = isDone;
@@ -25,7 +28,6 @@
 				_done = true;
 			}
 		}
-
 		void ICommand.PerformUndo()
 		{
 			if (!_done) return;

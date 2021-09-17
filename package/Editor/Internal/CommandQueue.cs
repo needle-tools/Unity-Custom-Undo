@@ -14,22 +14,26 @@ namespace Needle
 			return OnAddCommand(command);
 		}
 
-		public void Undo()
+		public bool Undo()
 		{
-			if (_currentIndex < 0 || _commands.Count <= 0) return;
+			if (_currentIndex < 0 || _commands.Count <= 0) return false;
 			var cmd = _commands[_currentIndex];
+			if (!cmd.CanUndo()) return false;
 			cmd.PerformUndo();
 			_currentIndex -= 1;
 			if (_currentIndex < 0) _currentIndex = 0;
+			return false;
 		}
 
-		public void Redo()
+		public bool Redo()
 		{
-			if (_commands.Count <= 0) return;
-			if (IsAtHead) return;
+			if (_commands.Count <= 0) return false;
+			if (IsAtHead) return false;
 			_currentIndex += 1;
 			var cmd = _commands[_currentIndex];
+			if (!cmd.CanRedo()) return false;
 			cmd.PerformRedo();
+			return true;
 		}
 
 		private void RemoveCommandAfterIndexIfNecessary()

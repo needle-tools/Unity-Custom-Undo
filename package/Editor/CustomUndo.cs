@@ -1,4 +1,6 @@
-﻿namespace Needle
+﻿using UnityEditor;
+
+namespace Needle
 {
 	public static class CustomUndo
 	{
@@ -14,12 +16,20 @@
 
 		internal static void OnUndo(string _)
 		{
-			Commands.Undo();
+			if (!Commands.Undo())
+			{
+				// if a command for some reason can not run perform another Unity undo?
+				// Undo.PerformUndo();
+			}
 		}
 
 		internal static void OnRedo(string _)
 		{
-			Commands.Redo();
+			if (!Commands.Redo())
+			{
+				// if a command for some reason can not run perform another Unity redo?
+				// Undo.PerformRedo();
+			}
 		}
 	}
 }
