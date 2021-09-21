@@ -19,7 +19,7 @@ namespace Needle
 
 			Undo.RegisterCompleteObjectUndo(_instance, name + CommandMarker);
 			_instance.value += 1;
-			UnityUndoTracker.OnDidPerformMockCommand();
+			UnityUndoTracker.Refresh();
 		}
 		
 		public uint value;

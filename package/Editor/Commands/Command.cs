@@ -6,7 +6,7 @@
 
 		public bool CanUndo { get; protected set; } = true;
 		public bool CanRedo { get; protected set; } = true;
-		public bool IsDone { get; protected set; } = false;
+		public bool IsDone { get; private set; } = false;
 
 		bool ICommand.CanUndo() => CanUndo;
 		bool ICommand.CanRedo() => CanRedo;
@@ -25,6 +25,7 @@
 			}
 			finally
 			{
+				EditorLogs.Log("Redo performed: " + this);
 				_done = true;
 			}
 		}
@@ -37,6 +38,7 @@
 			}
 			finally
 			{
+				EditorLogs.Log("Undo performed: " + this);
 				_done = false;
 			}
 		}

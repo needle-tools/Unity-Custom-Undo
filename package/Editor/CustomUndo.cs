@@ -5,9 +5,11 @@ namespace Needle
 {
 	public static class CustomUndo
 	{
-		public static bool LogToConsole = false;
+		public static bool LogToConsole = true;
 
 		public static event Action DidInjectCustomCommand;
+
+		public static void Clear() => _customCommandsQueue.Clear();
 
 		public static void Register(ICommand command)
 		{
@@ -18,7 +20,7 @@ namespace Needle
 			}
 		}
 		
-		private static CommandQueue _customCommandsQueue { get; } = new CommandQueue();
+		internal static CommandQueue _customCommandsQueue { get; } = new CommandQueue();
 
 		internal static void OnUndo(string _)
 		{

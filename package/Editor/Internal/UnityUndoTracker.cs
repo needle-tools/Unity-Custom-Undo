@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Remoting.Channels;
 using UnityEditor;
 
 namespace Needle
@@ -17,7 +18,7 @@ namespace Needle
 		private static int lastUndoRecordsCount, lastRedoRecordsCount;
 
 		internal static event Action<string> UnityUndoPerformed, UnityRedoPerformed;
-		
+
 		[InitializeOnLoadMethod]
 		private static void Init()
 		{
@@ -29,27 +30,46 @@ namespace Needle
 
 		private static void OnUndoRedo()
 		{
+			bool wasRedo = false, wasUndo = false;
+			var undo = undoRecords.LastOrDefault();
+			var redo = redoRecords.LastOrDefault();
 			UpdateLists();
 			if (undoRecords.Count > lastUndoRecordsCount)
 			{
 				// was redo
-				UnityRedoPerformed?.Invoke(undoRecords.LastOrDefault());
+				wasRedo = true;
 			}
 			else if (redoRecords.Count > lastRedoRecordsCount)
 			{
 				// was undo
-				UnityUndoPerformed?.Invoke(redoRecords.LastOrDefault());
+				wasUndo = true;
 			}
+
 			UpdateCounts();
+
+			if (wasRedo)
+				UnityRedoPerformed?.Invoke(undoRecords.LastOrDefault());
+			if (wasUndo)
+				UnityUndoPerformed?.Invoke(redoRecords.LastOrDefault());
 		}
 
 		private static MethodBase getRecordsMethod;
 		private static object[] parameters;
+		private static bool isRefreshing;
 
-		internal static void OnDidPerformMockCommand()
+		internal static void Refresh()
 		{
-			UpdateLists();
-			UpdateCounts();
+			if (isRefreshing) return;
+			isRefreshing = true;
+			try
+			{
+				UpdateLists();
+				UpdateCounts();
+			}
+			finally
+			{
+				isRefreshing = false;
+			}
 		}
 
 		private static void UpdateLists()
@@ -61,9 +81,10 @@ namespace Needle
 				getRecordsMethod = typeof(UnityEditor.Undo).GetMethod("GetRecords", BindingFlags.NonPublic | BindingFlags.Static);
 				parameters = new object[] { undoRecords, redoRecords };
 			}
+			Undo.FlushUndoRecordObjects();
 			getRecordsMethod?.Invoke(null, parameters);
 		}
-		
+
 		private static void UpdateCounts()
 		{
 			lastUndoRecordsCount = undoRecords.Count;
