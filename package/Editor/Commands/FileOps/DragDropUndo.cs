@@ -19,25 +19,29 @@ namespace Needle
 		public DragDropUndo(DropEventArgs args) : base(true)
 		{
 			this.args = args;
-			Debug.Log(args);
+			EditorLog.Log(args);
 		}
 
 		protected override void OnRedo()
 		{
-			Debug.Log(movedFiles?.Count);
 			if (movedFiles == null || movedFiles.Count <= 0) return;
 			var requireRefresh = false;
 			switch (args.dropResult)
 			{
 				case DragAndDropVisualMode.Copy:
-					for (var index = 0; index < movedFiles.Count; index++)
+					for (var index = movedFiles.Count - 1; index >= 0; index--)
 					{
 						var moved = movedFiles[index];
-						Debug.Log(moved);
+						EditorLog.Log(moved);
 						if (File.Exists(moved.to) && !File.Exists(moved.@from))
 						{
 							requireRefresh = true;
 							File.Move(moved.to, moved.@from);
+						}
+						else if (Directory.Exists(moved.to) && !Directory.Exists(moved.@from))
+						{
+							requireRefresh = true;
+							Directory.CreateDirectory(moved.@from);
 						}
 					}
 
@@ -72,20 +76,13 @@ namespace Needle
 					{
 						var file = args.files[index];
 						if (File.Exists(file.to))
-						{
-							requireRefresh = true;
-							if (file.@from == null)
-							{
-								if (MoveToRecycleBin(file.to))
-								{
-									var meta = file.to + ".meta";
-									if (File.Exists(meta))
-									{
-										MoveToRecycleBin(meta);
-									}
-								}
-							}
-						}
+							MoveFileAndMetaToRecycleBin(file, ref requireRefresh);
+					}
+					for (var index = args.files.Count - 1; index >= 0; index--)
+					{
+						var file = args.files[index];
+						if (Directory.Exists(file.to))
+							MoveFileAndMetaToRecycleBin(file, ref requireRefresh);
 					}
 
 					break;
@@ -103,6 +100,24 @@ namespace Needle
 			}
 		}
 
+		private void MoveFileAndMetaToRecycleBin(MoveInfo file, ref bool requireRefresh)
+		{
+			EditorLog.Log(file);
+			if (!File.Exists(file.to) && !Directory.Exists(file.to)) return;
+			requireRefresh = true;
+			if (file.@from == null)
+			{
+				if (MoveToRecycleBin(file.to))
+				{
+					var meta = file.to + ".meta";
+					if (File.Exists(meta))
+					{
+						MoveToRecycleBin(meta);
+					}
+				}
+			}
+		}
+
 		private bool MoveToRecycleBin(string filePath)
 		{
 			if (movedFiles == null) movedFiles = new List<MoveInfo>();
@@ -110,9 +125,10 @@ namespace Needle
 			{
 				var info = new MoveInfo(filePath, res);
 				movedFiles.Add(info);
-				Debug.Log(info);
+				EditorLog.Log("<b>moved</b> " + info);
 				return true;
 			}
+			else EditorLog.LogWarning("Failed moving " + filePath);
 
 			return false;
 		}

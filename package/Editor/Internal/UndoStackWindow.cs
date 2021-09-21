@@ -31,6 +31,7 @@ namespace Needle
 			EditorApplication.hierarchyChanged += Refresh;
 			Selection.selectionChanged += Refresh;
 			Undo.willFlushUndoRecord += Refresh;
+			EditorApplication.projectChanged += Refresh;
 		}
 
 		private Vector2 scroll;

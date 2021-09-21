@@ -18,12 +18,15 @@ namespace Needle
 		public static bool MoveToRecycleBin(string filePath, out string binPath)
 		{
 			var fileInfo = new FileInfo(filePath);
-			var tempDir = Path.GetTempPath();
 			var targetDir = fileInfo.Directory != null ? tempBin + "/" + fileInfo.Directory.Name : tempBin;
 			if (!Directory.Exists(targetDir))
 				Directory.CreateDirectory(targetDir);
 			binPath = targetDir + "/" + fileInfo.Name;
 			if (File.Exists(binPath)) File.Delete(binPath);
+			else if (Directory.Exists(binPath))
+			{
+				return true;
+			}
 			File.Move(filePath, binPath);
 			return true;
 		}
