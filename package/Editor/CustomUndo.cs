@@ -1,15 +1,20 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 
 namespace Needle
 {
 	public static class CustomUndo
 	{
+		public static bool LogToConsole = false;
+
+		public static event Action DidInjectCustomCommand;
 
 		public static void Register(ICommand command)
 		{
 			if (_customCommandsQueue.Enqueue(command))
 			{
 				UnityCommandMock.RegisterCustomCommand(command.Name);
+				DidInjectCustomCommand?.Invoke();
 			}
 		}
 		

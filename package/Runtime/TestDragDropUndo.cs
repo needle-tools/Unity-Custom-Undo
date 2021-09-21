@@ -20,6 +20,7 @@ namespace DefaultNamespace
 
 		private void OnDrop(DropEventArgs obj)
 		{
+			Debug.Log("On Drop event", this);
 			CustomUndo.Register(new DragDropUndo(obj));
 		}
 	}

@@ -8,6 +8,10 @@ namespace Needle
 {
 	internal static class UnityUndoTracker
 	{
+		internal static IReadOnlyList<string> UndoRecords => undoRecords;
+		internal static IReadOnlyList<string> RedoRecords => redoRecords;
+
+
 		private static readonly List<string> undoRecords = new List<string>();
 		private static readonly List<string> redoRecords = new List<string>();
 		private static int lastUndoRecordsCount, lastRedoRecordsCount;
@@ -50,6 +54,8 @@ namespace Needle
 
 		private static void UpdateLists()
 		{
+			undoRecords.Clear();
+			redoRecords.Clear();
 			if (getRecordsMethod == null)
 			{
 				getRecordsMethod = typeof(UnityEditor.Undo).GetMethod("GetRecords", BindingFlags.NonPublic | BindingFlags.Static);

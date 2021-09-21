@@ -74,7 +74,7 @@ namespace Needle
 
 	internal static class DragDropServiceBridge
 	{
-		public static event Action<DropEventArgs> ProjectBrowserDropPerformed;
+		internal static event Action<DropEventArgs>? ProjectBrowserDropPerformed;
 
 		internal static string[]? lastChangedAssets, lastAddedAssets, lastDeletedAssets;
 		internal static AssetMoveInfo[]? lastMovedAssets;
