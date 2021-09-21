@@ -24,17 +24,17 @@ namespace Needle
 		protected override void OnRedo()
 		{
 			if (!_prefab) return;
-			_instance = Object.Instantiate(_prefab);
+			if(!_instance) _instance = Object.Instantiate(_prefab);
 			_instance.hideFlags = HideFlags.DontSaveInEditor;
+			if(!_instance.activeSelf)
+				_instance.SetActive(true);
 		}
 
 		protected override void OnUndo()
 		{
 			if (!_instance) return;
-			if (Application.isPlaying)
-				Object.Destroy(_instance);
-			else Object.DestroyImmediate(_instance);
-			_instance = null;
+			_instance.SetActive(false);
+			_instance.hideFlags = HideFlags.HideAndDontSave;
 		}
 
 		public override string ToString()

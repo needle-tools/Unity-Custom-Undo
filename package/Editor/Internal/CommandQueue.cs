@@ -23,7 +23,7 @@ namespace Needle
 				return false;
 			}
 
-			if (_currentIndex <= _commands.Count) _currentIndex = _commands.Count - 1;
+			if (_currentIndex >= _commands.Count) _currentIndex = _commands.Count - 1;
 			var cmd = _commands[_currentIndex];
 			_currentIndex -= 1;
 			if (!cmd.CanUndo())

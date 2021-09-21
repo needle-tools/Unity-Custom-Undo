@@ -47,8 +47,7 @@ namespace Needle
 
 			EditorGUILayout.BeginVertical();
 			scroll = EditorGUILayout.BeginScrollView(scroll);
-
-			// EditorGUILayout.LabelField("Redo", EditorStyles.boldLabel);
+			
 			for (var index = 0; index < UnityUndoTracker.RedoRecords.Count; index++)
 			{
 				var str = UnityUndoTracker.RedoRecords[index];
@@ -58,7 +57,7 @@ namespace Needle
 						new GUIContent(str.Replace(UnityCommandMock.CommandMarker, string.Empty), "Redo"),
 						buttonOptions))
 					{
-						UndoHelper.Redo(UnityUndoTracker.RedoRecords.Count - (index));
+						UndoHelper.Redo(UnityUndoTracker.RedoRecords.Count - index);
 						return;
 					}
 				}
@@ -88,15 +87,29 @@ namespace Needle
 			}
 			
 			EditorGUILayout.EndScrollView();
-
+			
 			EditorGUILayout.BeginHorizontal();
-			if (GUILayout.Button("Custom Undo", GUILayout.Height(50)))
+			if (GUILayout.Button("Unity Undo", GUILayout.Height(50)))
+			{
+				Undo.PerformUndo();
+				return;
+			}
+			if (GUILayout.Button("Unity Redo", GUILayout.Height(50)))
+			{
+				Undo.PerformRedo();
+				return;
+			}
+			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.BeginHorizontal();
+			if (GUILayout.Button("Custom Undo", GUILayout.Height(20)))
 			{
 				CustomUndo.OnUndo(string.Empty);
+				return;
 			}
-			if (GUILayout.Button("Custom Redo", GUILayout.Height(50)))
+			if (GUILayout.Button("Custom Redo", GUILayout.Height(20)))
 			{
 				CustomUndo.OnRedo(string.Empty);
+				return;
 			}
 			EditorGUILayout.EndHorizontal();
 
@@ -104,12 +117,17 @@ namespace Needle
 			{
 				Refresh();
 			}
-			if (GUILayout.Button("Clear Stack"))
+			
+
+
+			GUILayout.Space(10);
+			if (GUILayout.Button("Clear Stack", GUILayout.Height(25)))
 			{
 				Undo.ClearAll();
 				CustomUndo.Clear();
 				Refresh();
 			}
+			GUILayout.Space(6);
 			EditorGUILayout.EndVertical();
 		}
 
