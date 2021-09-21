@@ -84,8 +84,10 @@ namespace Needle
 			Undo.FlushUndoRecordObjects();
 			getRecordsMethod?.Invoke(null, parameters);
 			CleanRecords(undoRecords);
-			CleanRecords(redoRecords);
+			CleanRecords(redoRecords);//, undoRecords[undoRecords.Count-1] == selectionChangedRecord);
 		}
+		
+		private const string selectionChangedRecord = "Selection Change";
 
 		private static void UpdateCounts()
 		{
@@ -93,20 +95,19 @@ namespace Needle
 			lastRedoRecordsCount = redoRecords.Count;
 		}
 
-		private static void CleanRecords(IList<string> list)
+		private static void CleanRecords(IList<string> list, bool allowSkipFirst = false)
 		{
-			const string sel = "Selection Change";
 			var wasSelectionChanged = false;
 			for (var i = list.Count - 1; i >= 0; i--)
 			{
-				if (list[i] != sel)
+				if (list[i] != selectionChangedRecord)
 				{
 					wasSelectionChanged = false;
 				}
-				else if (list[i] == sel)
+				else if (list[i] == selectionChangedRecord)
 				{
-					if (wasSelectionChanged) list.RemoveAt(i);
-					else wasSelectionChanged = true;
+					if (wasSelectionChanged || (i == list.Count-1 && allowSkipFirst)) list.RemoveAt(i);
+					wasSelectionChanged = true;
 				}
 			}
 		}

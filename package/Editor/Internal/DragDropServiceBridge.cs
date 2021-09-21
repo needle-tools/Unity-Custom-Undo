@@ -144,7 +144,8 @@ namespace Needle
 				{
 					if (perform)
 					{
-						ProjectBrowserDropPerformed?.Invoke(new DropEventArgs(dragInstanceId, dropUponPath, dropResult));
+						if(lastAddedAssets?.Length > 0)
+							ProjectBrowserDropPerformed?.Invoke(new DropEventArgs(dragInstanceId, dropUponPath, dropResult));
 						lastChangedAssets = lastAddedAssets = lastDeletedAssets = null;
 						lastMovedAssets = null;
 					}

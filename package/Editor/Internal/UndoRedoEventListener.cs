@@ -20,10 +20,10 @@ namespace Needle
 			if (EditorApplication.isCompiling || EditorApplication.isUpdating) return;
 			if (obj.EndsWith(UnityCommandMock.CommandMarker))
 			{
-				Debug.Log("<b>Custom redo</b>: " + obj);
+				EditorLog.Log("<b>Custom redo</b>: " + obj);
 				CustomUndo.OnRedo(obj);
 			}
-			else Debug.Log("<b>Unity redo</b>: " + obj);
+			else EditorLog.Log("<b>Unity redo</b>: " + obj);
 		}
 
 		private static void OnUndo(string obj)
@@ -31,10 +31,10 @@ namespace Needle
 			if (EditorApplication.isCompiling || EditorApplication.isUpdating) return;
 			if (obj.EndsWith(UnityCommandMock.CommandMarker))
 			{
-				Debug.Log("<b>Custom undo</b>: " + obj);
+				EditorLog.Log("<b>Custom undo</b>: " + obj);
 				CustomUndo.OnUndo(obj);
 			}
-			else Debug.Log("<b>Unity undo</b>: " + obj);
+			else EditorLog.Log("<b>Unity undo</b>: " + obj);
 		}
 	}
 }

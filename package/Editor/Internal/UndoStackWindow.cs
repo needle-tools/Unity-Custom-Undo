@@ -87,6 +87,8 @@ namespace Needle
 			}
 			
 			EditorGUILayout.EndScrollView();
+
+			CustomUndo.LogToConsole = EditorGUILayout.ToggleLeft("DebugLog", CustomUndo.LogToConsole);
 			
 			EditorGUILayout.BeginHorizontal();
 			if (GUILayout.Button("Unity Undo", GUILayout.Height(50)))

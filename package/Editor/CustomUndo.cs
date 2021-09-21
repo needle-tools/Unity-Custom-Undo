@@ -5,7 +5,11 @@ namespace Needle
 {
 	public static class CustomUndo
 	{
-		public static bool LogToConsole = true;
+		public static bool LogToConsole
+		{
+			get => SessionState.GetBool("CustomUndoLog", false);
+			set => SessionState.SetBool("CustomUndoLog", value);
+		}
 
 		public static event Action DidInjectCustomCommand;
 
@@ -19,7 +23,7 @@ namespace Needle
 				DidInjectCustomCommand?.Invoke();
 			}
 		}
-		
+
 		internal static CommandQueue _customCommandsQueue { get; } = new CommandQueue();
 
 		internal static void OnUndo(string _)

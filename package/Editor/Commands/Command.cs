@@ -25,7 +25,7 @@
 			}
 			finally
 			{
-				EditorLogs.Log("Redo performed: " + this);
+				EditorLog.Log("Redo performed: " + this);
 				_done = true;
 			}
 		}
@@ -38,7 +38,7 @@
 			}
 			finally
 			{
-				EditorLogs.Log("Undo performed: " + this);
+				EditorLog.Log("Undo performed: " + this);
 				_done = false;
 			}
 		}

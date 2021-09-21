@@ -2,7 +2,7 @@
 
 namespace Needle
 {
-	internal static class EditorLogs
+	internal static class EditorLog
 	{
 		public static void Log(object msg, object context = null)
 		{
