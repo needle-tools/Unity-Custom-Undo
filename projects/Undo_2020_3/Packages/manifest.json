@@ -40,6 +40,6 @@
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0",
     "com.needle.custom-undo-integration": "file:../../../package",
-    "com.needle.inspector-button": "file:C:/git/UndoEverything/modules/InspectorButton/package"
+    "com.needle.inspector-button": "file:../../../modules/InspectorButton/package"
   }
 }

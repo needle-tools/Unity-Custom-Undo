@@ -7,7 +7,7 @@
       "dependencies": {}
     },
     "com.needle.inspector-button": {
-      "version": "file:C:/git/UndoEverything/modules/InspectorButton/package",
+      "version": "file:../../../modules/InspectorButton/package",
       "depth": 0,
       "source": "local",
       "dependencies": {}
