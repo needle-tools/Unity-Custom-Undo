@@ -71,9 +71,9 @@ namespace Needle
 		}
 	}
 
-	internal static class DragDropServiceBridge
+	public static class DragDropServiceBridge
 	{
-		internal static event Action<DropEventArgs>? ProjectBrowserDropPerformed;
+		public static event Action<DropEventArgs>? ProjectBrowserDropPerformed;
 
 		internal static string[]? lastChangedAssets, lastAddedAssets, lastDeletedAssets;
 		internal static AssetMoveInfo[]? lastMovedAssets;
@@ -97,22 +97,29 @@ namespace Needle
 			{
 				if (asm.FullName == "UnityEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null")
 				{
-					var type = asm.GetType("UnityEditor.DragAndDropService");
+					var type = asm.GetType("UnityEditor.DragAndDropService") ?? asm.GetType("UnityEditor.DragAndDrop") ;
 					if (type != null)
 					{
 						InitDragDropServiceType(type);
+						return;
 					}
 				}
 			}
+			
+			
+
+			EditorLog.LogWarning("Failed finding drag drop service");
 		}
 
 		private static void InitDragDropServiceType(Type type)
 		{
 			if (didRunInit) return;
 			didRunInit = true;
-			var fieldInfo = type.GetField("m_DropDescriptors", BindingFlags.Static | BindingFlags.NonPublic);
+			var fieldInfo = type.GetField("m_DropDescriptors", BindingFlags.Static | BindingFlags.NonPublic) ?? 
+			                type.GetField("m_DropHandlers", BindingFlags.Static | BindingFlags.NonPublic);
+			if(fieldInfo == null) EditorLog.LogWarning("Failed finding handlers field");
 			dropDescriptorsList = fieldInfo?.GetValue(null) as Dictionary<int, List<Delegate>>;
-			if (dropDescriptorsList != null)
+			if (dropDescriptorsList != null) 
 			{
 				if (dropDescriptorsList.TryGetValue(kProjectBrowserDropDstId, out var list))
 				{

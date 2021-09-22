@@ -78,7 +78,7 @@ namespace Needle
 			redoRecords.Clear();
 			if (getRecordsMethod == null)
 			{
-				getRecordsMethod = typeof(UnityEditor.Undo).GetMethod("GetRecords", BindingFlags.NonPublic | BindingFlags.Static);
+				getRecordsMethod = typeof(UnityEditor.Undo).GetMethod("GetRecords", BindingFlags.NonPublic | BindingFlags.Static, null, CallingConventions.Any, new []{typeof(List<string>), typeof(List<string>)}, null);
 				parameters = new object[] { undoRecords, redoRecords };
 			}
 			Undo.FlushUndoRecordObjects();
@@ -87,7 +87,7 @@ namespace Needle
 			CleanRecords(redoRecords);//, undoRecords[undoRecords.Count-1] == selectionChangedRecord);
 		}
 		
-		private const string selectionChangedRecord = "Selection Change";
+		private static readonly string[] selectionChangedRecord = {"Selection Change", "Clear Selection"};
 
 		private static void UpdateCounts()
 		{
@@ -100,11 +100,11 @@ namespace Needle
 			var wasSelectionChanged = false;
 			for (var i = list.Count - 1; i >= 0; i--)
 			{
-				if (list[i] != selectionChangedRecord)
+				if (!selectionChangedRecord.Contains(list[i]))
 				{
 					wasSelectionChanged = false;
 				}
-				else if (list[i] == selectionChangedRecord)
+				else if (selectionChangedRecord.Contains(list[i]))
 				{
 					if (wasSelectionChanged || (i == list.Count-1 && allowSkipFirst)) list.RemoveAt(i);
 					wasSelectionChanged = true;

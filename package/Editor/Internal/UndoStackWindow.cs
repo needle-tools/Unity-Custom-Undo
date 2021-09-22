@@ -49,7 +49,7 @@ namespace Needle
 			EditorGUILayout.BeginVertical();
 			scroll = EditorGUILayout.BeginScrollView(scroll);
 			
-			for (var index = 0; index < UnityUndoTracker.RedoRecords.Count; index++)
+			for (var index = UnityUndoTracker.RedoRecords.Count - 1; index >= 0; index--)
 			{
 				var str = UnityUndoTracker.RedoRecords[index];
 				using (new EditorGUILayout.HorizontalScope())
@@ -58,7 +58,7 @@ namespace Needle
 						new GUIContent(str.Replace(UnityCommandMock.CommandMarker, string.Empty), "Redo"),
 						buttonOptions))
 					{
-						UndoHelper.Redo(UnityUndoTracker.RedoRecords.Count - index);
+						UndoHelper.Redo(index+1);
 						return;
 					}
 				}

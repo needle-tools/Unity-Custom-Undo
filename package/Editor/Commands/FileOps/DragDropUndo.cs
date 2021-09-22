@@ -32,16 +32,24 @@ namespace Needle
 					for (var index = movedFiles.Count - 1; index >= 0; index--)
 					{
 						var moved = movedFiles[index];
-						EditorLog.Log(moved);
-						if (File.Exists(moved.to) && !File.Exists(moved.@from))
+						try
 						{
-							requireRefresh = true;
-							File.Move(moved.to, moved.@from);
+							EditorLog.Log(moved);
+							if (File.Exists(moved.to) && !File.Exists(moved.@from))
+							{
+								requireRefresh = true;
+								File.Move(moved.to, moved.@from);
+							}
+							else if (Directory.Exists(moved.to) && !Directory.Exists(moved.@from))
+							{
+								requireRefresh = true;
+								Directory.CreateDirectory(moved.@from);
+							}
 						}
-						else if (Directory.Exists(moved.to) && !Directory.Exists(moved.@from))
+						catch (DirectoryNotFoundException ex)
 						{
-							requireRefresh = true;
-							Directory.CreateDirectory(moved.@from);
+							EditorLog.LogError(moved);
+							EditorLog.LogError(ex);
 						}
 					}
 
