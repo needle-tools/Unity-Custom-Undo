@@ -19,7 +19,7 @@ namespace Needle
 
 			Undo.RegisterCompleteObjectUndo(_instance, name + CommandMarker);
 			_instance.value += 1;
-			Undo.IncrementCurrentGroup();
+			// Undo.IncrementCurrentGroup();
 		}
 		
 		public uint value;

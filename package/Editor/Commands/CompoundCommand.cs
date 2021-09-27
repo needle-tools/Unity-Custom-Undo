@@ -18,7 +18,7 @@ namespace Needle
 			this._commands = commands;
 		}
 		
-		public override bool IsValid => _commands.Any(c => c.IsValid);
+		public override bool IsValid => _commands.Count > 0 && _commands.Any(c => c.IsValid);
 
 		protected override void OnRedo()
 		{
