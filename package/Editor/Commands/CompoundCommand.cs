@@ -18,6 +18,8 @@ namespace Needle
 			this._commands = commands;
 		}
 		
+		public override bool IsValid => _commands.Any(c => c.IsValid);
+
 		protected override void OnRedo()
 		{
 			foreach (var cmd in _commands)
