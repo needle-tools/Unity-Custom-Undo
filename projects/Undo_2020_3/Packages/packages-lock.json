@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "com.needle.custom-undo-extras": {
+      "version": "file:../../extras",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
     "com.needle.custom-undo-integration": {
       "version": "file:../../../package",
       "depth": 0,

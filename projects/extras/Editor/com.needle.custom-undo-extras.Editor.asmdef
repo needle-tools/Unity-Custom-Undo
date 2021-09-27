@@ -1,0 +1,13 @@
+{
+    "name": "com.needle.custom-undo-extras.Editor",
+    "references": ["com.needle.custom-undo-extras"],
+    "includePlatforms": ["Editor"],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
