@@ -13,8 +13,8 @@ namespace Needle
 		internal static IReadOnlyList<string> RedoRecords => redoRecords;
 
 
-		private static readonly List<string> undoRecords = new List<string>();
-		private static readonly List<string> redoRecords = new List<string>();
+		private static readonly List<string> undoRecords = new List<string>(), redoRecords = new List<string>();
+		private static readonly List<string> previousUndo = new List<string>(), previousRedo = new List<string>();
 		private static int lastUndoRecordsCount, lastRedoRecordsCount;
 
 		internal static event Action<string> UnityUndoPerformed, UnityRedoPerformed;
@@ -31,15 +31,22 @@ namespace Needle
 		private static void OnUndoRedo()
 		{
 			bool wasRedo = false, wasUndo = false;
-			var undo = undoRecords.LastOrDefault();
-			var redo = redoRecords.LastOrDefault();
+
+
+			// we need to have another list because one undo can undo multiple operations (e.g. selection + value change) 
+			// so to capture all potential custom undo actions
+			previousUndo.Clear();
+			previousUndo.AddRange(undoRecords);
+			previousRedo.Clear();
+			previousRedo.AddRange(redoRecords);
+
 			UpdateLists();
-			if (undoRecords.Count > lastUndoRecordsCount)
+			if (undoRecords.Count > previousUndo.Count)
 			{
 				// was redo
 				wasRedo = true;
 			}
-			else if (redoRecords.Count > lastRedoRecordsCount)
+			else if (redoRecords.Count > previousRedo.Count)
 			{
 				// was undo
 				wasUndo = true;
@@ -48,9 +55,25 @@ namespace Needle
 			UpdateCounts();
 
 			if (wasRedo)
-				UnityRedoPerformed?.Invoke(undoRecords.LastOrDefault());
+			{
+				var diff = undoRecords.Count - previousUndo.Count;
+				for (var i = 0; i < diff; i++)
+				{
+					var index = previousUndo.Count + i;
+					var rec = undoRecords[index];
+					UnityRedoPerformed?.Invoke(rec);
+				}
+			}
 			if (wasUndo)
-				UnityUndoPerformed?.Invoke(redoRecords.LastOrDefault());
+			{
+				var diff = redoRecords.Count - previousRedo.Count;
+				for (var i = 0; i < diff; i++)
+				{
+					var index = previousRedo.Count + i;
+					var rec = redoRecords[index];
+					UnityUndoPerformed?.Invoke(rec);
+				}
+			}
 		}
 
 		private static MethodBase getRecordsMethod;
@@ -83,8 +106,6 @@ namespace Needle
 			}
 			Undo.FlushUndoRecordObjects();
 			getRecordsMethod?.Invoke(null, parameters);
-			CleanRecords(undoRecords);
-			CleanRecords(redoRecords);//, undoRecords[undoRecords.Count-1] == selectionChangedRecord);
 		}
 		
 		private static readonly string[] selectionChangedRecord = {"Selection Change", "Clear Selection"};

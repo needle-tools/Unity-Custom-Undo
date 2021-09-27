@@ -1,10 +1,17 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Needle
 {
 	public class CompoundCommand : Command
 	{
-		private readonly ICommand[] _commands;
+		private readonly IList<ICommand> _commands;
+		
+		public CompoundCommand(IEnumerable<ICommand> col)
+		{
+			this._commands = col.ToArray();
+		}
 		
 		public CompoundCommand(params ICommand[] commands)
 		{
@@ -21,7 +28,7 @@ namespace Needle
 
 		protected override void OnUndo()
 		{
-			for (var index = _commands.Length - 1; index >= 0; index--)
+			for (var index = _commands.Count - 1; index >= 0; index--)
 			{
 				var cmd = _commands[index];
 				cmd.PerformUndo();

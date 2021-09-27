@@ -1,10 +1,6 @@
-﻿using System;
-using System.Diagnostics.SymbolStore;
-using System.Threading.Tasks;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Needle
 {
@@ -27,7 +23,11 @@ namespace Needle
 			titleContent = new GUIContent("Undo Stack");
 			currentStyle = null;
 			Undo.undoRedoPerformed += Repaint;
-			CustomUndo.DidInjectCustomCommand += Repaint;
+			CustomUndo.DidInjectCustomCommand += () =>
+			{
+				UnityUndoTracker.Refresh();
+				Repaint();
+			};
 			EditorApplication.hierarchyChanged += Refresh;
 			Selection.selectionChanged += Refresh;
 			Undo.willFlushUndoRecord += Refresh;
@@ -118,7 +118,7 @@ namespace Needle
 
 			if (GUILayout.Button("Refresh", GUILayout.Height(50)))
 			{
-				Refresh();
+				UnityUndoTracker.Refresh();
 			}
 			
 
@@ -128,6 +128,7 @@ namespace Needle
 			{
 				Undo.ClearAll();
 				CustomUndo.Clear();
+				UnityUndoTracker.Refresh();
 				Refresh();
 			}
 			GUILayout.Space(6);
@@ -136,7 +137,6 @@ namespace Needle
 
 		private void Refresh()
 		{
-			UnityUndoTracker.Refresh();
 			Repaint();
 			InternalEditorUtility.RepaintAllViews();
 		}
