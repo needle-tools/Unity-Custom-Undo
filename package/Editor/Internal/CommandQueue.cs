@@ -23,11 +23,16 @@ namespace Needle
 				return false;
 			}
 
-			var atEnd = _currentIndex >= _commands.Count;
-			if (atEnd) _currentIndex = _commands.Count - 1;
+			if (_currentIndex >= _commands.Count)
+				_currentIndex = _commands.Count - 1;
+			else _currentIndex -= 1;
+			if (_currentIndex < 0)
+			{
+				_currentIndex = 0;
+				EditorLog.Log("Nothing to undo (is at end)");
+				return false;
+			}
 			var cmd = _commands[_currentIndex];
-			if(!atEnd)
-				_currentIndex -= 1;
 			if (!cmd.CanUndo())
 			{
 				EditorLog.Log("Can not undo " + cmd);
@@ -35,7 +40,6 @@ namespace Needle
 			}
 			EditorLog.Log("Undo " + cmd + ", " + _currentIndex);
 			cmd.PerformUndo();
-			if (_currentIndex < 0) _currentIndex = 0;
 			return false;
 		}
 
@@ -52,14 +56,15 @@ namespace Needle
 				EditorLog.Log("Nothing to redo (is at head)");
 				return false;
 			}
-			
-			var cmd = _commands[_currentIndex++];
+
+			var index = _currentIndex++;
+			var cmd = _commands[index];
 			if (!cmd.CanRedo())
 			{
 				EditorLog.Log("Can not redo " + cmd);
 				return false;
 			}
-			EditorLog.Log("Redo " + cmd + ", " + _currentIndex);
+			EditorLog.Log("Redo " + cmd + ", " + index);
 			cmd.PerformRedo();
 			return true;
 		}

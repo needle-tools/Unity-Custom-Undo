@@ -20,6 +20,8 @@
 		protected Command(bool isDone = false)
 		{
 			this._done = isDone;
+			// ReSharper disable once VirtualMemberCallInConstructor
+			_debugHashCode = GetHashCode();
 		}
 		
 		void ICommand.PerformRedo()
@@ -63,5 +65,11 @@
 		protected abstract void OnUndo();
 		
 		private bool _done = false;
+		private readonly int _debugHashCode;
+
+		public override string ToString()
+		{
+			return base.ToString() + " (" + _debugHashCode + ")";
+		}
 	}
 }
