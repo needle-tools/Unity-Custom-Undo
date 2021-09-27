@@ -43,5 +43,12 @@ namespace Needle
 				// Undo.PerformRedo();
 			}
 		}
+
+
+
+		internal static void OnRemoveCommand(string _)
+		{
+			_customCommandsQueue.RemoveCommands();
+		}
 	}
 }

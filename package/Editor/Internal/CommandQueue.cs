@@ -75,10 +75,16 @@ namespace Needle
 			_currentIndex = 0;
 		}
 
+		internal void RemoveCommands()
+		{
+			RemoveCommandAfterIndexIfNecessary();
+		}
+
 		private void RemoveCommandAfterIndexIfNecessary()
 		{
 			if (!IsAtHead)
 			{
+				EditorLog.Log("<b>Removing commands</b>");
 				for (var i = _commands.Count - 1; i > _currentIndex; i--)
 				{
 					_commands.RemoveAt(i);

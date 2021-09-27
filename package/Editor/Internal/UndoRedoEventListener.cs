@@ -9,10 +9,22 @@ namespace Needle
 		private static void Init()
 		{
 			UnityUndoTracker.UnityUndoPerformed -= OnUndo;
-			UnityUndoTracker.UnityRedoPerformed -= OnRedo;
-			
 			UnityUndoTracker.UnityUndoPerformed += OnUndo;
+			
+			UnityUndoTracker.UnityRedoPerformed -= OnRedo;
 			UnityUndoTracker.UnityRedoPerformed += OnRedo;
+
+			UnityUndoTracker.RemoveCommands -= OnRemoveCommands;
+			UnityUndoTracker.RemoveCommands += OnRemoveCommands;
+		}
+
+		private static void OnRemoveCommands(string obj)
+		{
+			if (EditorApplication.isCompiling || EditorApplication.isUpdating) return;
+			if (obj.EndsWith(UnityCommandMock.CommandMarker))
+			{
+				CustomUndo.OnRemoveCommand(obj);
+			}
 		}
 
 		private static void OnRedo(string obj)

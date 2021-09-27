@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Remoting.Channels;
 using UnityEditor;
+using UnityEngine;
 
 namespace Needle
 {
@@ -17,22 +18,33 @@ namespace Needle
 		private static readonly List<string> previousUndo = new List<string>(), previousRedo = new List<string>();
 		private static int lastUndoRecordsCount, lastRedoRecordsCount;
 
-		internal static event Action<string> UnityUndoPerformed, UnityRedoPerformed;
+		internal static event Action<string> UnityUndoPerformed, UnityRedoPerformed, RemoveCommands;
 
 		[InitializeOnLoadMethod]
 		private static void Init()
 		{
 			Undo.undoRedoPerformed -= OnUndoRedo;
 			Undo.undoRedoPerformed += OnUndoRedo;
+			Undo.postprocessModifications -= OnPostProcess;
+			Undo.postprocessModifications += OnPostProcess;
 			UpdateLists();
 			UpdateCounts();
+		}
+
+		private static UndoPropertyModification[] OnPostProcess(UndoPropertyModification[] modifications)
+		{
+			if (redoRecords.Count > 0)
+			{
+				for (var i = 0; i < redoRecords.Count; i++)
+					RemoveCommands?.Invoke(redoRecords[0]);
+				redoRecords.Clear();
+			}
+			return modifications;
 		}
 
 		private static void OnUndoRedo()
 		{
 			bool wasRedo = false, wasUndo = false;
-
-			// TODO: how to detect when command is added while not at tip? because in that case we have to remove all commands from our custom queue
 
 			// we need to have another list because one undo can undo multiple operations (e.g. selection + value change) 
 			// so to capture all potential custom undo actions
@@ -102,14 +114,15 @@ namespace Needle
 			redoRecords.Clear();
 			if (getRecordsMethod == null)
 			{
-				getRecordsMethod = typeof(UnityEditor.Undo).GetMethod("GetRecords", BindingFlags.NonPublic | BindingFlags.Static, null, CallingConventions.Any, new []{typeof(List<string>), typeof(List<string>)}, null);
+				getRecordsMethod = typeof(UnityEditor.Undo).GetMethod("GetRecords", BindingFlags.NonPublic | BindingFlags.Static, null, CallingConventions.Any,
+					new[] { typeof(List<string>), typeof(List<string>) }, null);
 				parameters = new object[] { undoRecords, redoRecords };
 			}
 			Undo.FlushUndoRecordObjects();
 			getRecordsMethod?.Invoke(null, parameters);
 		}
-		
-		private static readonly string[] selectionChangedRecord = {"Selection Change", "Clear Selection"};
+
+		private static readonly string[] selectionChangedRecord = { "Selection Change", "Clear Selection" };
 
 		private static void UpdateCounts()
 		{
@@ -128,7 +141,7 @@ namespace Needle
 				}
 				else if (selectionChangedRecord.Contains(list[i]))
 				{
-					if (wasSelectionChanged || (i == list.Count-1 && allowSkipFirst)) list.RemoveAt(i);
+					if (wasSelectionChanged || (i == list.Count - 1 && allowSkipFirst)) list.RemoveAt(i);
 					wasSelectionChanged = true;
 				}
 			}
