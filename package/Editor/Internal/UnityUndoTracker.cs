@@ -32,6 +32,7 @@ namespace Needle
 		{
 			bool wasRedo = false, wasUndo = false;
 
+			// TODO: how to detect when command is added while not at tip? because in that case we have to remove all commands from our custom queue
 
 			// we need to have another list because one undo can undo multiple operations (e.g. selection + value change) 
 			// so to capture all potential custom undo actions
