@@ -108,7 +108,7 @@ namespace Needle
 			
 			
 
-			EditorLog.LogWarning("Failed finding drag drop service");
+			UndoLog.LogWarning("Failed finding drag drop service");
 		}
 
 		private static void InitDragDropServiceType(Type type)
@@ -117,7 +117,7 @@ namespace Needle
 			didRunInit = true;
 			var fieldInfo = type.GetField("m_DropDescriptors", BindingFlags.Static | BindingFlags.NonPublic) ?? 
 			                type.GetField("m_DropHandlers", BindingFlags.Static | BindingFlags.NonPublic);
-			if(fieldInfo == null) EditorLog.LogWarning("Failed finding handlers field");
+			if(fieldInfo == null) UndoLog.LogWarning("Failed finding handlers field");
 			dropDescriptorsList = fieldInfo?.GetValue(null) as Dictionary<int, List<Delegate>>;
 			if (dropDescriptorsList != null) 
 			{

@@ -19,7 +19,7 @@ namespace Needle
 		public DragDropUndo(DropEventArgs args) : base(true)
 		{
 			this.args = args;
-			EditorLog.Log(args);
+			UndoLog.Log(args);
 		}
 
 		protected override void OnRedo()
@@ -34,7 +34,7 @@ namespace Needle
 						var moved = movedFiles[index];
 						try
 						{
-							EditorLog.Log(moved);
+							UndoLog.Log(moved);
 							if (File.Exists(moved.to) && !File.Exists(moved.@from))
 							{
 								requireRefresh = true;
@@ -48,8 +48,8 @@ namespace Needle
 						}
 						catch (DirectoryNotFoundException ex)
 						{
-							EditorLog.LogError(moved);
-							EditorLog.LogError(ex);
+							UndoLog.LogError(moved);
+							UndoLog.LogError(ex);
 						}
 					}
 
@@ -110,7 +110,7 @@ namespace Needle
 
 		private void MoveFileAndMetaToRecycleBin(MoveInfo file, ref bool requireRefresh)
 		{
-			EditorLog.Log(file);
+			UndoLog.Log(file);
 			if (!File.Exists(file.to) && !Directory.Exists(file.to)) return;
 			requireRefresh = true;
 			if (file.@from == null)
@@ -133,10 +133,10 @@ namespace Needle
 			{
 				var info = new MoveInfo(filePath, res);
 				movedFiles.Add(info);
-				EditorLog.Log("<b>moved</b> " + info);
+				UndoLog.Log("<b>moved</b> " + info);
 				return true;
 			}
-			else EditorLog.LogWarning("Failed moving " + filePath);
+			else UndoLog.LogWarning("Failed moving " + filePath);
 
 			return false;
 		}

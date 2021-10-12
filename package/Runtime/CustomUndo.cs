@@ -5,12 +5,7 @@ namespace Needle
 {
 	public static class CustomUndo
 	{
-		public static bool LogToConsole
-		{
-			get => SessionState.GetBool("CustomUndoLog", false);
-			set => SessionState.SetBool("CustomUndoLog", value);
-		}
-
+		internal static event Action<string> requestEditorMock;
 		public static event Action DidInjectCustomCommand;
 
 		public static void Clear() => _customCommandsQueue.Clear();
@@ -19,7 +14,7 @@ namespace Needle
 		{
 			if (_customCommandsQueue.Enqueue(command))
 			{
-				UnityCommandMock.RegisterCustomCommand(command.Name);
+				requestEditorMock?.Invoke(command.Name);
 				DidInjectCustomCommand?.Invoke();
 			}
 		}

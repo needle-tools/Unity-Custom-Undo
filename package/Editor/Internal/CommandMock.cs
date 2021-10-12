@@ -3,8 +3,14 @@ using UnityEngine;
 
 namespace Needle
 {
+	[InitializeOnLoad]
 	internal class UnityCommandMock : ScriptableObject
 	{
+		static UnityCommandMock()
+		{
+			CustomUndo.requestEditorMock += RegisterCustomCommand;
+		}
+		
 		// could be invisible utf8 maybe
 		internal const string CommandMarker = "                                           _Needle_Command";
 		

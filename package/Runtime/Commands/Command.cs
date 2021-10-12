@@ -28,17 +28,17 @@
 		{
 			if (_done)
 			{
-				EditorLog.Log("Can not redo, already done " + this);
+				UndoLog.Log("Can not redo, already done " + this);
 				return;
 			}
 			try
 			{
-				EditorLog.Log("Redo " + this); 
+				UndoLog.Log("Redo " + this); 
 				OnRedo();
 			}
 			finally
 			{
-				EditorLog.Log("Redo performed: " + this);
+				UndoLog.Log("Redo performed: " + this);
 				_done = true;
 			}
 		}
@@ -46,17 +46,17 @@
 		{
 			if (!_done)
 			{
-				EditorLog.Log("Can not undo, not done " + this);
+				UndoLog.Log("Can not undo, not done " + this);
 				return;
 			}
 			try
 			{
-				EditorLog.Log("Undo " + this);
+				UndoLog.Log("Undo " + this);
 				OnUndo();
 			}
 			finally
 			{
-				EditorLog.Log("Undo performed: " + this);
+				UndoLog.Log("Undo performed: " + this);
 				_done = false;
 			}
 		}
