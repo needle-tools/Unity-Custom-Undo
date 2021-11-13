@@ -1,6 +1,6 @@
 ﻿namespace Needle
 {
-	public abstract class Command : ICommand
+	public abstract class Command : ICommand, ICaptureState
 	{
 		private string name;
 		public virtual string Name
@@ -71,5 +71,15 @@
 		{
 			return base.ToString() + " (" + _debugHashCode + ")";
 		}
+
+		private bool captured;
+		public void CaptureState()
+		{
+			if (captured) return;
+			captured = true;
+			OnCaptureState();
+		}
+
+		protected virtual void OnCaptureState(){}
 	}
 }

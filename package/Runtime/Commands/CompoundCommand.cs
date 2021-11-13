@@ -11,11 +11,13 @@ namespace Needle
 		public CompoundCommand(IEnumerable<ICommand> col)
 		{
 			this._commands = col.ToArray();
+			CaptureState();
 		}
 		
 		public CompoundCommand(params ICommand[] commands)
 		{
 			this._commands = commands;
+			CaptureState();
 		}
 		
 		public override bool IsValid => _commands.Count > 0 && _commands.Any(c => c.IsValid);
@@ -34,6 +36,15 @@ namespace Needle
 			{
 				var cmd = _commands[index];
 				cmd.PerformUndo();
+			}
+		}
+		
+		protected override void OnCaptureState()
+		{
+			foreach (var kf in _commands)
+			{
+				if(kf is ICaptureState f) 
+					f.CaptureState();
 			}
 		}
 	}
