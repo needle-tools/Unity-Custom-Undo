@@ -19,14 +19,14 @@
 
 		protected Command(bool isDone = false)
 		{
-			this._done = isDone;
+			this.IsDone = isDone;
 			// ReSharper disable once VirtualMemberCallInConstructor
 			_debugHashCode = GetHashCode();
 		}
 		
 		void ICommand.PerformRedo()
 		{
-			if (_done)
+			if (IsDone)
 			{
 				UndoLog.Log("Can not redo, already done " + this);
 				return;
@@ -39,12 +39,12 @@
 			finally
 			{
 				UndoLog.Log("Redo performed: " + this);
-				_done = true;
+				IsDone = true;
 			}
 		}
 		void ICommand.PerformUndo()
 		{
-			if (!_done)
+			if (!IsDone)
 			{
 				UndoLog.Log("Can not undo, not done " + this);
 				return;
@@ -57,14 +57,13 @@
 			finally
 			{
 				UndoLog.Log("Undo performed: " + this);
-				_done = false;
+				IsDone = false;
 			}
 		}
 
 		protected abstract void OnRedo();
 		protected abstract void OnUndo();
 		
-		private bool _done = false;
 		private readonly int _debugHashCode;
 
 		public override string ToString()
